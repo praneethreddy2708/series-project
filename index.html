@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angel Investor Bio</title>
+    <style>
+        #loading {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Angel Investor Bio</h1>
+    <form id="bioForm">
+        <label for="bio">Bio:</label>
+        <input type="text" id="bio" name="bio" required>
+        <button type="submit">Download</button>
+    </form>
+    <div id="loading">Loading...</div>
+    <a id="downloadLink" style="display:none;">Download CSV</a>
+
+    <script>
+        document.getElementById('bioForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const bio = document.getElementById('bio').value;
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+
+            const response = await fetch('/api/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ bio })
+            });
+
+            loading.style.display = 'none';
+
+            if (response.ok) {
+                let data;
+                try {
+                    data = await response.json();
+                } catch (error) {
+                    alert('Failed to parse the response as JSON');
+                    return;
+                }
+                const csvContent = "data:text/csv;charset=utf-8,"
+                    + "email,name,linkedin_url\n"
+                    + data.map(e => `${e.email},${e.name},${e.linkedin_url}`).join("\n");
+
+                const encodedUri = encodeURI(csvContent);
+                const downloadLink = document.getElementById('downloadLink');
+                downloadLink.setAttribute("href", encodedUri);
+                downloadLink.setAttribute("download", "angel_investors.csv");
+                downloadLink.click();
+            } else {
+                alert('Failed to process the bio');
+            }
+        });
+    </script>
+</body>
+</html>

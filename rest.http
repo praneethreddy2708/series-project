@@ -1,0 +1,6 @@
+POST http://localhost:3000/api/process
+Content-Type: application/json
+
+{
+  "bio": "Angel Investor"
+}
