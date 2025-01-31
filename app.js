@@ -15,8 +15,8 @@ app.get('/', (req, res) => {
 
 app.post('/api/process', async (req, res) => {
     try {
-        const serpApiKey = "214b3fbcbe44cdf69aeb81bd4c1d6a542b05f081988ee7d875405d16e9dace5a";//ca134a9c524710b19c806ffea7a4054f91559be27785d2612b03e6eb6d91f686";
-        const apolloApiKey = "UPpz8GbPyNSFXmPhLLqbLw";//"XBOMKV9yi03Uu_ZeVl_2rg";//"n8Oh3zUxgolsLtbFGIZs3A";
+        const serpApiKey = "SERPAPI_API_KEY";
+        const apolloApiKey = "Apollo_API_KEY";
         //const { bio } = req.body;
         const data = await runSearchWorkflow(req.body.bio, "linkedin", serpApiKey, apolloApiKey, 5);
 
